@@ -8,11 +8,23 @@ resource "azurerm_key_vault" "this" {
   
 }
 
+#resource "azurerm_key_vault_secret" "this" {
+#  # the secrets for stuff
+#  count = length(var.secret_map)
+#  name = keys(var.secret_map)[count.index]
+#  value = values(var.secret_map)[count.index]
+#  key_vault_id = azurerm_key_vault.this.id
+#
+#  depends_on = [
+#    azurerm_role_assignment.this
+#  ]
+#}
+
 resource "azurerm_key_vault_secret" "this" {
   # the secrets for stuff
-  count = length(var.secret_map)
-  name = keys(var.secret_map)[count.index]
-  value = values(var.secret_map)[count.index]
+  count = length(local.secret_map)
+  name = keys(local.secret_map)[count.index]
+  value = values(local.secret_map)[count.index]
   key_vault_id = azurerm_key_vault.this.id
 
   depends_on = [

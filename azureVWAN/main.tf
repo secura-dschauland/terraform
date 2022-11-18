@@ -47,7 +47,10 @@ locals {
 
   is_neenah = length(regexall(".*neenah,*", local.neenah_vpn_site_link_name)) > 0
 
-
+  secret_map = {
+    tfstate-access-key = data.azurerm_key_vault_secret.storagekey.value
+    vwan-psk = data.azurerm_key_vault_secret.psk.value
+  }
 
 
 }
@@ -79,8 +82,15 @@ data "azurerm_key_vault" "kv" {
 
 data "azurerm_key_vault_secret" "psk" {
   name         = "vwan-psk"
-  key_vault_id = data.azurerm_key_vault.kv.id
+  key_vault_id = azurerm_key_vault.this.id #data.azurerm_key_vault.kv.id
 }
+
+data "azurerm_key_vault_secret" "storagekey" {
+  name = "tfstate-access-key"
+  key_vault_id = azurerm_key_vault.this.id
+}
+
+
 
 data "azurerm_storage_account" "this" {
   name                = "scvwan"

@@ -42,16 +42,16 @@ variable "vpn_link_names" {
   default = [ "link-neenah-to-azure", "link-azure-to-dc" ]
 }
 
-variable "secret_map" {
-    type = object({
-      tfstate-access-key = string
-      vwan-psk = string
-    })
-    default = {
-      "tfstate-access-key" = "02eVSWYbx4t8q7s2odhCs/zENMg30AvG8Xmo9fWiGIny5jsBwBMumFFKYZGwnHml4oTLarFTxRy8+ASty3PlIQ==" #"${data.azurerm_storage_account.this.primary_access_key}"
-      "vwan-psk" = "TxG7v4sm4rbKNiuJSckYwrHlLFAkNFn0b"
-    }
-  }
+#variable "secret_map" {
+#    type = object({
+#      tfstate-access-key = string
+#      vwan-psk = string
+#    })
+#    default = {
+#      "tfstate-access-key" = "02eVSWYbx4t8q7s2odhCs/zENMg30AvG8Xmo9fWiGIny5jsBwBMumFFKYZGwnHml4oTLarFTxRy8+ASty3PlIQ==" #"${data.azurerm_storage_account.this.primary_access_key}"
+#      "vwan-psk" = "TxG7v4sm4rbKNiuJSckYwrHlLFAkNFn0b"
+#    }
+#  }
 
 variable "neenah_ipsec" {
   type = object({
