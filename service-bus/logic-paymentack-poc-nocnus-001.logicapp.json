@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "$connections": {
+            "defaultValue": {},
+            "type": "Object"
+        }
+    },
+    "triggers": {
+        "manual": {
+            "type": "Request",
+            "kind": "Http",
+            "inputs": {
+                "schema": {
+                    "properties": {
+                        "BatchNumber": {
+                            "type": "integer"
+                        },
+                        "CustomerName": {
+                            "type": "string"
+                        },
+                        "PaymentAmount": {
+                            "type": "number"
+                        },
+                        "Timezone": {
+                            "type": "string"
+                        },
+                        "TransactionDate": {
+                            "type": "string"
+                        },
+                        "TransactionId": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            }
+        }
+    },
+    "actions": {
+        "Response": {
+            "runAfter": {
+                "Send_message": [
+                    "Succeeded"
+                ]
+            },
+            "type": "Response",
+            "kind": "Http",
+            "inputs": {
+                "statusCode": 200
+            }
+        },
+        "Send_message": {
+            "runAfter": {},
+            "type": "ApiConnection",
+            "inputs": {
+                "body": {
+                    "ContentData": "@{base64(triggerBody())}"
+                },
+                "host": {
+                    "connection": {
+                        "name": "@parameters('$connections')['servicebus']['connectionId']"
+                    }
+                },
+                "method": "post",
+                "path": "/@{encodeURIComponent(encodeURIComponent('paymentack_topic'))}/messages",
+                "queries": {
+                    "systemProperties": "None"
+                }
+            }
+        }
+    },
+    "outputs": {}
+}

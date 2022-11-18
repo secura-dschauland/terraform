@@ -1,0 +1,247 @@
+PS C:\Users\de03930\Documents\terraform\azureVWAN> terraform plan -out tf.json
+data.azurerm_resource_group.rg: Reading...
+data.azurerm_resource_group.rg: Read complete after 0s [id=/subscriptions/7d095679-9a86-45cb-8de8-082ea2a9d5ae/resourceGroups/rg-core-shared-nocnus-001]
+data.azurerm_key_vault.kv: Reading...
+data.azurerm_key_vault.kv: Read complete after 1s [id=/subscriptions/7d095679-9a86-45cb-8de8-082ea2a9d5ae/resourceGroups/rg-core-shared-nocnus-001/providers/Microsoft.KeyVault/vaults/kv-it-nonprod-tfstate]
+data.azurerm_key_vault_secret.psk: Reading...
+data.azurerm_key_vault_secret.psk: Read complete after 0s [id=https://kv-it-nonprod-tfstate.vault.azure.net/secrets/vwan-psk/13d41c24fdf5407a8319f0bc013fb474]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # azurerm_virtual_hub.vwan-hub will be created
+  + resource "azurerm_virtual_hub" "vwan-hub" {
+      + address_prefix         = "10.230.2.0/23"
+      + default_route_table_id = (known after apply)
+      + id                     = (known after apply)
+      + location               = "northcentralus"
+      + name                   = "vwan-information technology-hub"
+      + resource_group_name    = "rg-core-shared-nocnus-001"
+      + virtual_router_asn     = (known after apply)
+      + virtual_router_ips     = (known after apply)
+      + virtual_wan_id         = (known after apply)
+    }
+
+  # azurerm_virtual_hub_connection.vwan-hub-spoke01 will be created
+  + resource "azurerm_virtual_hub_connection" "vwan-hub-spoke01" {
+      + id                        = (known after apply)
+      + internet_security_enabled = false
+      + name                      = "vwan-hub-conn-vent-networkingtest-nonprod-nocnus-001"
+      + remote_virtual_network_id = (known after apply)
+      + virtual_hub_id            = (known after apply)
+
+      + routing {
+          + associated_route_table_id = (known after apply)
+
+          + propagated_route_table {
+              + labels          = (known after apply)
+              + route_table_ids = (known after apply)
+            }
+
+          + static_vnet_route {
+              + address_prefixes    = (known after apply)
+              + name                = (known after apply)
+              + next_hop_ip_address = (known after apply)
+            }
+        }
+    }
+
+  # azurerm_virtual_network.spoke01 will be created
+  + resource "azurerm_virtual_network" "spoke01" {
+      + address_space       = [
+          + "10.227.0.0/22",
+        ]
+      + dns_servers         = (known after apply)
+      + guid                = (known after apply)
+      + id                  = (known after apply)
+      + location            = "northcentralus"
+      + name                = "vent-networkingtest-nonprod-nocnus-001"
+      + resource_group_name = "rg-core-shared-nocnus-001"
+      + subnet              = (known after apply)
+    }
+
+  # azurerm_virtual_wan.vwan will be created
+  + resource "azurerm_virtual_wan" "vwan" {
+      + allow_branch_to_branch_traffic    = true
+      + disable_vpn_encryption            = false
+      + id                                = (known after apply)
+      + location                          = "northcentralus"
+      + name                              = "vwan-information technology-non-prod"
+      + office365_local_breakout_category = "None"
+      + resource_group_name               = "rg-core-shared-nocnus-001"
+      + tags                              = {
+          + "department"  = "information technology"
+          + "environment" = "non-prod"
+          + "owner"       = "system services"
+          + "solution"    = "vwan"
+        }
+      + type                              = "Standard"
+    }
+
+  # azurerm_vpn_gateway.gateway will be created
+  + resource "azurerm_vpn_gateway" "gateway" {
+      + id                  = (known after apply)
+      + location            = "northcentralus"
+      + name                = "vgw-non-prod-information technology-vwan"
+      + resource_group_name = "rg-core-shared-nocnus-001"
+      + routing_preference  = (known after apply)
+      + scale_unit          = 2
+      + tags                = {
+          + "department"  = "information technology"
+          + "environment" = "non-prod"
+          + "owner"       = "system services"
+          + "solution"    = "vwan"
+        }
+      + virtual_hub_id      = (known after apply)
+
+      + bgp_settings {
+          + asn                 = (known after apply)
+          + bgp_peering_address = (known after apply)
+          + peer_weight         = (known after apply)
+
+          + instance_0_bgp_peering_address {
+              + custom_ips          = (known after apply)
+              + default_ips         = (known after apply)
+              + ip_configuration_id = (known after apply)
+              + tunnel_ips          = (known after apply)
+            }
+
+          + instance_1_bgp_peering_address {
+              + custom_ips          = (known after apply)
+              + default_ips         = (known after apply)
+              + ip_configuration_id = (known after apply)
+              + tunnel_ips          = (known after apply)
+            }
+        }
+    }
+
+  # azurerm_vpn_gateway_connection.vpnconnection will be created
+  + resource "azurerm_vpn_gateway_connection" "vpnconnection" {
+      + id                        = (known after apply)
+      + internet_security_enabled = false
+      + name                      = "connection-neenah-to-azure"
+      + remote_vpn_site_id        = (known after apply)
+      + vpn_gateway_id            = (known after apply)
+
+      + routing {
+          + associated_route_table = (known after apply)
+
+          + propagated_route_table {
+              + labels          = (known after apply)
+              + route_table_ids = (known after apply)
+            }
+        }
+
+      + traffic_selector_policy {
+          + local_address_ranges  = [
+              + "172.17.0.0/16",
+              + "172.18.0.0/16",
+              + "172.19.0.0/16",
+              + "172.21.0.0/16",
+              + "172.22.0.0/16",
+              + "172.23.0.0/16",
+              + "172.31.0.0/16",
+            ]
+          + remote_address_ranges = [
+              + "10.227.0.0/22",
+            ]
+        }
+
+      + vpn_link {
+          + bandwidth_mbps                        = 10
+          + bgp_enabled                           = false
+          + connection_mode                       = "Default"
+          + local_azure_ip_address_enabled        = false
+          + name                                  = "link-neenah-to-azure"
+          + policy_based_traffic_selector_enabled = false
+          + protocol                              = "IKEv1"
+          + ratelimit_enabled                     = false
+          + route_weight                          = 0
+          + shared_key                            = (sensitive)
+          + vpn_site_link_id                      = (known after apply)
+
+          + ipsec_policy {
+              + dh_group                 = "DHGroup14"
+              + encryption_algorithm     = "AES256"
+              + ike_encryption_algorithm = "AES256"
+              + ike_integrity_algorithm  = "SHA1"
+              + integrity_algorithm      = "SHA1"
+              + pfs_group                = "None"
+              + sa_data_size_kb          = 102400000
+              + sa_lifetime_sec          = 3600
+            }
+        }
+    }
+
+  # azurerm_vpn_site.this will be created
+  + resource "azurerm_vpn_site" "this" {
+      + address_cidrs       = [
+          + "172.17.0.0/16",
+          + "172.18.0.0/16",
+          + "172.19.0.0/16",
+          + "172.21.0.0/16",
+          + "172.22.0.0/16",
+          + "172.23.0.0/16",
+          + "172.31.0.0/16",
+        ]
+      + device_model        = "ftd"
+      + device_vendor       = "cisco"
+      + id                  = (known after apply)
+      + location            = "northcentralus"
+      + name                = "vpn-site-azure-to-neenah"
+      + resource_group_name = "rg-core-shared-nocnus-001"
+      + tags                = {
+          + "department"  = "information technology"
+          + "environment" = "non-prod"
+          + "owner"       = "system services"
+          + "solution"    = "vwan"
+        }
+      + virtual_wan_id      = (known after apply)
+
+      + link {
+          + id            = (known after apply)
+          + ip_address    = "98.100.228.4"
+          + name          = "vpn-link-az2neenah"
+          + provider_name = "Spectrum"
+          + speed_in_mbps = 1000
+        }
+    }
+
+  # module.naming.random_string.first_letter will be created
+  + resource "random_string" "first_letter" {
+      + id          = (known after apply)
+      + length      = 1
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = false
+      + numeric     = false
+      + result      = (known after apply)
+      + special     = false
+      + upper       = false
+    }
+
+  # module.naming.random_string.main will be created
+  + resource "random_string" "main" {
+      + id          = (known after apply)
+      + length      = 60
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + numeric     = true
+      + result      = (known after apply)
+      + special     = false
+      + upper       = false
+    }
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + vault_uri = "https://kv-it-nonprod-tfstate.vault.azure.net/"

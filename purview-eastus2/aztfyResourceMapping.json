@@ -1,0 +1,7 @@
+{
+	"/subscriptions/f9e679cc-f4df-46f5-9f23-1a837f0b248c/resourceGroups/rg-iap-prod-eastus2": {
+		"resource_id": "/subscriptions/f9e679cc-f4df-46f5-9f23-1a837f0b248c/resourceGroups/rg-iap-prod-eastus2",
+		"resource_type": "azurerm_resource_group",
+		"resource_name": "res-0"
+	}
+}
